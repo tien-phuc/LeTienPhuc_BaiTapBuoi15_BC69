@@ -61,29 +61,11 @@ const const50Den100Kw = 650;
 const const100Den200Kw = 850;
 const const200Den350Kw = 1100;
 const constConLai = 1300;
-
-let hamGiaTienDien = (soKw) => {
-  switch (soKw) {
-    case const50KwDau:
-      return;
-    case const50Den100Kw:
-      return;
-    case const100Den200Kw:
-      return;
-    case const200Den350Kw:
-      return;
-    case constConLai:
-      return;
-    default:
-      return 0;
-  }
-};
 document.getElementById("tinhTienDien").onclick = function () {
   console.log("bị bấm");
   let hoTen = document.getElementById("hoTen").value;
   let soKw = document.getElementById("soKw").value * 1;
 
-  //   let tinhSoKw = hamGiaTienDien(soKw);
   let tong = 0;
 
   if (soKw == 0 || hoTen == "") {
@@ -118,6 +100,7 @@ document.getElementById("tinhTienDien").onclick = function () {
     return "Vui lòng nhập số Kw đã tiêu thụ";
   }
 
+  //   hiện nội dung
   document.getElementById(
     "ketQuaBaiTap2"
   ).innerHTML = `Họ tên: ${hoTen}, tổng tiền điện: ${tong.toLocaleString("vi", {
@@ -126,3 +109,107 @@ document.getElementById("tinhTienDien").onclick = function () {
   })}`;
 };
 // Bài 3
+function tinhTienThue(thuNhap, soNguoiPhuThuoc) {
+  let thuNhapChiuThue = thuNhap - 4e6 - soNguoiPhuThuoc * 1.6e6;
+  let tongTienThue = 0;
+
+  if (thuNhapChiuThue <= 60e6) {
+    tongTienThue = thuNhapChiuThue * 0.05;
+  } else if (thuNhapChiuThue <= 120e6) {
+    tongTienThue = 60e6 * 0.05 + (thuNhapChiuThue - 60e6) * 0.1;
+  } else if (thuNhapChiuThue <= 210e6) {
+    tongTienThue = 60e6 * 0.05 + 60e6 * 0.1 + (thuNhapChiuThue - 120e6) * 0.15;
+  } else if (thuNhapChiuThue <= 384e6) {
+    tongTienThue =
+      60e6 * 0.05 + 60e6 * 0.1 + 90e6 * 0.15 + (thuNhapChiuThue - 210e6) * 0.2;
+  } else if (thuNhapChiuThue <= 624e6) {
+    tongTienThue =
+      60e6 * 0.05 +
+      60e6 * 0.1 +
+      90e6 * 0.15 +
+      174e6 * 0.2 +
+      (thuNhapChiuThue - 384e6) * 0.25;
+  } else if (thuNhapChiuThue <= 960e6) {
+    tongTienThue =
+      60e6 * 0.05 +
+      60e6 * 0.1 +
+      90e6 * 0.15 +
+      174e6 * 0.2 +
+      240e6 * 0.25 +
+      (thuNhapChiuThue - 624e6) * 0.3;
+  } else {
+    tongTienThue =
+      60e6 * 0.05 +
+      60e6 * 0.1 +
+      90e6 * 0.15 +
+      174e6 * 0.2 +
+      240e6 * 0.25 +
+      336e6 * 0.3 +
+      (thuNhapChiuThue - 960e6) * 0.35;
+  }
+
+  return tongTienThue;
+}
+document.getElementById("tinhTienThue").onclick = function () {
+  let hoTenNguoiDongThue = document.getElementById("hoTenNguoiDongThue").value;
+  let thuNhap = document.getElementById("thuNhap").value * 1;
+  let soNguoiPhuThuoc = document.getElementById("soNguoiPhuthuoc").value * 1;
+
+  let tienThue = tinhTienThue(thuNhap, soNguoiPhuThuoc);
+
+  //   hiện nội dung
+  document.getElementById(
+    "ketQuaBaiTap3"
+  ).innerHTML = `Họ tên: ${hoTenNguoiDongThue}, tổng tiền thuế của bạn là: ${tienThue.toLocaleString(
+    "vi",
+    { style: "currency", currency: "VND" }
+  )}`;
+};
+
+// Bài 4
+function tinhTienCap(loaiKhachHang, soKenhCaoCap, soKetNoi) {
+  let phiXuLyHoaDon = 0;
+  let phiDichVuCoBan = 0;
+  let tienThueKenhCaoCap = 0;
+
+  if (loaiKhachHang === "nhaDan") {
+    phiXuLyHoaDon = 4.5;
+    phiDichVuCoBan = 20.5;
+    tienThueKenhCaoCap = soKenhCaoCap * 7.5;
+  } else if (loaiKhachHang === "doanhNghiep") {
+    phiXuLyHoaDon = 15;
+    phiDichVuCoBan = 75 + (soKetNoi - 10) * 5;
+    tienThueKenhCaoCap = soKenhCaoCap * 50;
+  }
+
+  let tongTienCap = phiXuLyHoaDon + phiDichVuCoBan + tienThueKenhCaoCap;
+  return tongTienCap;
+}
+document.getElementById("tinhTienCap").onclick = function () {
+  let maKhachHang = document.getElementById("maKhachHang").value;
+  let loaiKhachHang = document.getElementById("loaiKhachHang").value;
+  let soKenhCaoCap = document.getElementById("soKenhCaoCap").value * 1;
+  let soKetNoi = document.getElementById("soKetNoi").value * 1;
+
+  if (
+    maKhachHang == "" ||
+    loaiKhachHang == "" ||
+    typeof soKenhCaoCap == "" ||
+    typeof soKetNoi == "" ||
+    soKenhCaoCap == ""
+  ) {
+    document.getElementById("ketQuaBaiTap4").innerHTML =
+      "Vui lòng nhập đầy đủ thông tin!";
+    return;
+  }
+
+  let tienCap = tinhTienCap(loaiKhachHang, soKenhCaoCap, soKetNoi);
+
+  //   hiện nội dung
+  document.getElementById(
+    "ketQuaBaiTap4"
+  ).innerHTML = `Mã khách hàng: ${maKhachHang}, tổng tiền cáp: ${tienCap.toLocaleString(
+    "en-US",
+    { style: "currency", currency: "USD" }
+  )}`;
+};
